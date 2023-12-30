@@ -23,7 +23,7 @@ namespace Blazor_ASPMVC.Data
 			modelBuilder.Entity<User>()
 			.HasMany(u => u.Properties)
 			.WithOne(p => p.User)
-			.HasForeignKey(p => p.User)
+			.HasForeignKey(p => p.UserID)
 			.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<User>()
@@ -38,12 +38,12 @@ namespace Blazor_ASPMVC.Data
 
 			modelBuilder.Entity<Property>()
 			.HasMany(p => p.PropertyImages)
-			.WithOne()
+			.WithOne(pi => pi.Property)
 			.HasForeignKey(pi => pi.PropertyID)
 			.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Property>()
-			.HasMany(p => p.Listing)
+			.HasMany(p => p.Listings)
 			.WithOne(l => l.Property)
 			.HasForeignKey(l => l.PropertyID);
 

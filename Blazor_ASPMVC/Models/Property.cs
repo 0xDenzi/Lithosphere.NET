@@ -65,7 +65,7 @@ namespace Blazor_ASPMVC.Models
         //Navigation property for images
         public virtual ICollection<PropertyImage> PropertyImages { get; set; }
 
-        public virtual ICollection<Listing> Listing { get; set; }
+        public virtual ICollection<Listing> Listings { get; set; }
 
         public Property()
         {
