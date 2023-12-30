@@ -63,6 +63,8 @@ namespace Blazor_ASPMVC.Models
         public virtual User User { get; set; }
 
         //Navigation property for images
+        [ForeignKey("PropertyImage")]
+        public int ImageID {  get; set; }
         public virtual ICollection<PropertyImage> PropertyImages { get; set; }
 
         public virtual ICollection<Listing> Listings { get; set; }
