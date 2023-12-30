@@ -12,6 +12,8 @@ namespace Blazor_ASPMVC.Models
 
         public DateTime? BookmarkListingClose { get; set; }
 
+
+
         [ForeignKey("Listing")]
         public int ListingID { get; set; }
 
