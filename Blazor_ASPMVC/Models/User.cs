@@ -9,17 +9,24 @@ namespace Blazor_ASPMVC.Models
 
         [Required]
         public string Name { get; set; }
-        [Required]
 
+        [Required]
         public string Address { get; set; }
 
         public string Description { get; set; }
+
         [Required]
         public string Password { get; set; }
 
         public DateTime AccountCreationDate { get; set; }
 
         public DateTime? AccountDeletedDate { get; set; }
+
+        public virtual ICollection<Property> Properties { get; set; }
+
+        public virtual ICollection<Bookmark> Bookmarks { get; set; }
+
+        public virtual ICollection<Tour> Tours { get; set; }
 
     }
 }
