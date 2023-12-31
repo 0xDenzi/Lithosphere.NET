@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Property>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index Properties</h1>
+
+<table class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Price
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Beds
+            </th>
+            <th>
+                Baths
+            </th>
+            <th>
+                Area
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model)
+        {
+            <tr>
+                <td width="50%">
+                    @obj.Price
+                </td>
+                <td width="30%">
+                    @obj.Area
+                </td>
+                <td width="30%">
+                    @obj.Address
+                </td>
+                <td width="30%">
+                    @obj.Beds
+                </td>
+                <td width="30%">
+                    @obj.Baths
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
