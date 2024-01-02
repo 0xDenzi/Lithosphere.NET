@@ -1,28 +1,20 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Blazor_ASPMVC.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        [Key]
-        public int UserID { get; set; }
-
+       
         [Required]
         public string Name { get; set; }
 
         [Required]
         public string Mobile { get; set; }
 
-        [Required]
-        public string Email { get; set; }
-
-        [Required]
         public string Address { get; set; }
 
         public string Description { get; set; }
-
-        [Required]
-        public string Password { get; set; }
 
         public DateTime AccountCreationDate { get; set; }
 

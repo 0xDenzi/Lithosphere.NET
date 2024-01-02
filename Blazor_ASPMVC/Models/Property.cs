@@ -58,7 +58,7 @@ namespace Blazor_ASPMVC.Models
         public StatusofProperty PropertyStatus { get; set; }
 
         [ForeignKey("User")]
-        public int UserID { get; set; }
+        public string UserID { get; set; }
 
         public virtual User User { get; set; }
 
