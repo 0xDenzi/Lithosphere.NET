@@ -20,7 +20,7 @@ namespace Blazor_ASPMVC.Models
         public virtual Listing Listing { get; set; }
 
         [ForeignKey("User")]
-        public int UserID { get; set; }
+        public string UserID { get; set; }
 
         public virtual User User { get; set; }
     }

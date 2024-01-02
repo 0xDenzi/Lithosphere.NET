@@ -1,16 +1,17 @@
 ﻿using Blazor_ASPMVC.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Blazor_ASPMVC.Data
 {
-	public class AppDbContext : DbContext
+	public class AppDbContext : IdentityDbContext<User>
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
 
 		}
 
-		public DbSet<User> Users { get; set; }
+		//public DbSet<User> Users { get; set; }
 		public DbSet<Property> Properties { get; set; }
 		public DbSet<Bookmark> Bookmarks { get; set; }
 		public DbSet<Listing> Listings { get; set; }
@@ -20,6 +21,8 @@ namespace Blazor_ASPMVC.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			base.OnModelCreating(modelBuilder);
+
 			modelBuilder.Entity<User>()
 			.HasMany(u => u.Properties)
 			.WithOne(p => p.User)
