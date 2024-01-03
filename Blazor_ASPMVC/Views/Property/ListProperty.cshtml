@@ -1,0 +1,81 @@
+﻿@model Blazor_ASPMVC.Models.PropertyListingViewModel
+
+@{
+    ViewData["Title"] = "List Your Property";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="ListProperty" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Beds"></label>
+        <input asp-for="Beds" class="form-control" />
+        <span asp-validation-for="Beds" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Baths"></label>
+        <input asp-for="Baths" class="form-control" />
+        <span asp-validation-for="Baths" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Area"></label>
+        <input asp-for="Area" class="form-control" />
+        <span asp-validation-for="Area" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Parking"></label>
+        <select asp-for="Parking" asp-items="Html.GetEnumSelectList<Blazor_ASPMVC.Models.TypeofParking>()" class="form-control"></select>
+        <span asp-validation-for="Parking" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PropertyType"></label>
+        <select asp-for="PropertyType" asp-items="Html.GetEnumSelectList<Blazor_ASPMVC.Models.TypesofProperty>()" class="form-control"></select>
+        <span asp-validation-for="PropertyType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ListingType"></label>
+        <select asp-for="ListingType" asp-items="Html.GetEnumSelectList<Blazor_ASPMVC.Models.TypeofListing>()" class="form-control"></select>
+        <span asp-validation-for="ListingType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PropertyImages">Upload Images</label>
+        <input asp-for="PropertyImages" type="file" multiple class="form-control" />
+        <span asp-validation-for="PropertyImages" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="List Property" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

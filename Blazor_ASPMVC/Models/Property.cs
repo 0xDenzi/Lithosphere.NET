@@ -10,6 +10,7 @@ namespace Blazor_ASPMVC.Models
         Residential,
         Apartment,
         Suite,
+        Office,
         Warehouse
     }
 
@@ -26,6 +27,12 @@ namespace Blazor_ASPMVC.Models
         OffStreet,
         Garage,
         Floor
+    }
+
+    public enum TypeofListing
+    {
+        Sell,
+        Rent
     }
 
     public class Property
@@ -49,6 +56,9 @@ namespace Blazor_ASPMVC.Models
         public double Area { get; set; }
 
         [Required]
+        public string Description { get; set; }
+
+        [Required]
         public TypeofParking Parking { get; set; }
 
         [Required]
@@ -56,6 +66,10 @@ namespace Blazor_ASPMVC.Models
 
         [Required]
         public StatusofProperty PropertyStatus { get; set; }
+
+        [Required]
+        public TypeofListing TypeofListing { get; set; }
+
 
         [ForeignKey("User")]
         public string UserID { get; set; }
@@ -73,5 +87,14 @@ namespace Blazor_ASPMVC.Models
         {
             PropertyStatus = StatusofProperty.Listed;
         }
+
+        public string GetFirstImageUrl()
+        {
+            return PropertyImages.Any() ? "/imgs/" + PropertyImages.First().ImageName : "/imgs/default.png";
+        }
+
+
+
+
     }
 }

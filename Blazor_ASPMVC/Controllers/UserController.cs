@@ -41,7 +41,7 @@ namespace Blazor_ASPMVC.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Login", "User");
+                    return RedirectToAction("index", "home");
                 }
 
                 foreach (var error in result.Errors)

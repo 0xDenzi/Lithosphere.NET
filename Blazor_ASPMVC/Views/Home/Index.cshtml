@@ -1,12 +1,41 @@
-﻿@using Blazor_ASPMVC.Components
-
-@{
-    ViewData["Title"] = "Home Page";
+﻿@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<style>
+    .hero-section {
+        display: flex;
+        justify-content: end; /* Aligns content to the right */
+        align-items: center;
+        min-height: 100vh;
+        background: url('/imgs/background_home.jpeg') no-repeat left center fixed; /* Fixed background */
+        background-size: cover;
+        color: black; /* Adjust text color if needed */
+    }
+    
+    .hero-text {
+        max-width: 50%;
+        padding-right: 10%; /* Adjusts padding to not overlap with the building */
+        text-align: right; /* Align text to the right */
+    }
+    
+    /* Optional: Add media query for responsiveness */
+    @@media (max-width: 768px) {
+        .hero-section {
+            justify-content: center;
+            text-align: center;
+        }
+        .hero-text {
+            max-width: 100%;
+            padding: 0 10%;
+        }
+    }
+</style>
 
-@(await Html.RenderComponentAsync<Counter>(RenderMode.Server))
+<div class="hero-section">
+    <div class="hero-text">
+        <h1>Elevate Your Lifestyle with Lithosphere</h1>
+        <p>Discover your ideal home with Lithosphere. Simple, personalized, and fulfilling, your journey to your dream home begins here, ensuring a seamless and memorable experience.</p>
+        <a href="@Url.Action("Register", "User")" class="btn btn-primary">Register</a>
+    </div>
+</div>

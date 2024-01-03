@@ -9,6 +9,7 @@ namespace Blazor_ASPMVC.Models
         public int ImageID { get; set; }
 
         public byte[] ImageData { get; set; }
+        public string ImageName { get; set; }
 
         [ForeignKey("Property")]
         public int PropertyID { get; set; }

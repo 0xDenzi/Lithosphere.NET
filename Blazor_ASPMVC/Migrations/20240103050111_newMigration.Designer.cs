@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blazor_ASPMVC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240102214420_newMigration")]
+    [Migration("20240103050111_newMigration")]
     partial class newMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,10 +67,13 @@ namespace Blazor_ASPMVC.Migrations
                     b.Property<DateTime>("ListingOpenDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ListingStatus")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("PropertyID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusofListing")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeListing")
                         .HasColumnType("int");
 
                     b.Property<string>("UserID")
@@ -106,6 +109,10 @@ namespace Blazor_ASPMVC.Migrations
                     b.Property<int>("Beds")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ImageID")
                         .HasColumnType("int");
 
@@ -119,6 +126,9 @@ namespace Blazor_ASPMVC.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("PropertyType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeofListing")
                         .HasColumnType("int");
 
                     b.Property<string>("UserID")
@@ -141,6 +151,9 @@ namespace Blazor_ASPMVC.Migrations
 
                     b.Property<byte[]>("ImageData")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PropertyID")
                         .HasColumnType("int");
