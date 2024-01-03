@@ -1,50 +1,34 @@
-﻿@model IEnumerable<Property>
+﻿@model IEnumerable<Blazor_ASPMVC.Models.Property>
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Properties List";
 }
 
-<h1>Index Properties</h1>
-
-<table class="table table-bordered table-striped" style="width:100%">
-    <thead>
-        <tr>
-            <th>
-                Price
-            </th>
-            <th>
-                Address
-            </th>
-            <th>
-                Beds
-            </th>
-            <th>
-                Baths
-            </th>
-            <th>
-                Area
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var obj in Model)
+<div class="container mt-3">
+    <div class="row">
+        @foreach (var property in Model)
         {
-            <tr>
-                <td width="50%">
-                    @obj.Price
-                </td>
-                <td width="30%">
-                    @obj.Area
-                </td>
-                <td width="30%">
-                    @obj.Address
-                </td>
-                <td width="30%">
-                    @obj.Beds
-                </td>
-                <td width="30%">
-                    @obj.Baths
-                </td>
-            </tr>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <img class="card-img-top" src="@Url.Content(property.GetFirstImageUrl())" alt="Property Image">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @if (property.TypeofListing == Blazor_ASPMVC.Models.TypeofListing.Sell)
+                            {
+                                <strong>@property.Price.ToString("C") | For Sale</strong>
+                            }
+                            else if (property.TypeofListing == Blazor_ASPMVC.Models.TypeofListing.Rent)
+                            {
+                                <strong>@property.Price.ToString("C") | For Rent</strong>
+                            }
+                        </h5>
+                        <p class="card-text">@property.Beds bds | @property.Baths ba | @property.Area sqft</p>
+                        <p class="card-text">Parking: @property.Parking.ToString()</p>
+                        <p class="card-text">Type: @property.PropertyType.ToString()</p>
+                        <a href="@Url.Action("Details", "Property", new { id = property.PropertyID })" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>

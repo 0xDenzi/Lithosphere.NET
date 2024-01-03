@@ -16,3 +16,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.navbar .dropdown-menu {
+    right: 0;
+    left: auto;
+    top: 100%;
+}

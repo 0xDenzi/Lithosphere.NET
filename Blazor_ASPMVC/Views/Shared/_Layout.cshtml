@@ -7,23 +7,71 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Blazor_ASPMVC.styles.css" asp-append-version="true" />
+    <style>
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .navbar-nav {
+        flex: 1; /* Removed justify-content to avoid overriding flex-end on the second navbar-nav */
+    }
+    
+    .navbar-brand {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2; /* Ensures the brand is above other elements */
+    }
+
+    /* Adjusting only the first navbar-nav to push "Property" text away from the brand */
+    @@media (min-width: 768px) {
+        .navbar-nav:first-child {
+            margin-right: auto; /* This will push the "Property" link to the left */
+            padding-left: 0%; /* Adjust this value to increase distance from the 'Lithosphere' */
+        }
+        .navbar-nav:last-child {
+            margin-left: 50%; /* This will push the "Help" and "Account" links to the right */
+            padding-right: 50%; /* Adjust this value to increase distance from the 'Lithosphere' if needed */
+        }
+    }
+</style>
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Lithosphere</a>
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid navbar-center">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Property" asp-action="Buy">Buy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Property" asp-action="Rent">Rent</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Property" asp-action="ListProperty">List</a>
+                            </li>
+                        }
+                        else
+                        {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Property" asp-action="Display">Property</a>
                         </li>
+                        }
                     </ul>
-                    <ul class="navbar-nav">
+                </div>
+                <a class="navbar-brand mx-auto" asp-area="" asp-controller="Home" asp-action="Index">Lithosphere</a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Help</a>
                         </li>
@@ -69,7 +117,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     <base href="~/" />
     <script src="_framework/blazor.server.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

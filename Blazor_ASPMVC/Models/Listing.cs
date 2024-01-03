@@ -5,6 +5,18 @@ namespace Blazor_ASPMVC.Models
 {
     public class Listing
     {
+        public enum ListingStatus
+        {
+            Open,
+            Closed
+        }
+
+        public enum TypeofListing
+        {
+            Sell,
+            Rent
+        }
+
         [Key]
         public int ListingID { get; set; }
 
@@ -12,7 +24,9 @@ namespace Blazor_ASPMVC.Models
 
         public DateTime ListingCloseDate { get; set; }
 
-        public string ListingStatus { get; set; }
+        public ListingStatus StatusofListing { get; set; }
+
+        public TypeofListing TypeListing { get; set; }
 
 
         [ForeignKey("Property")]
@@ -28,6 +42,8 @@ namespace Blazor_ASPMVC.Models
         public virtual ICollection<Tour> Tours { get; set; }
 
         public virtual ICollection<Bookmark> Bookmarks { get; set; }
+
+        
 
     }
 }

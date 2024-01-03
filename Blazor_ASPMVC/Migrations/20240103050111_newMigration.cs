@@ -171,9 +171,11 @@ namespace Blazor_ASPMVC.Migrations
                     Beds = table.Column<int>(type: "int", nullable: false),
                     Baths = table.Column<int>(type: "int", nullable: false),
                     Area = table.Column<double>(type: "float", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Parking = table.Column<int>(type: "int", nullable: false),
                     PropertyType = table.Column<int>(type: "int", nullable: false),
                     PropertyStatus = table.Column<int>(type: "int", nullable: false),
+                    TypeofListing = table.Column<int>(type: "int", nullable: false),
                     UserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ImageID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -196,7 +198,8 @@ namespace Blazor_ASPMVC.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ListingOpenDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ListingCloseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ListingStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StatusofListing = table.Column<int>(type: "int", nullable: false),
+                    TypeListing = table.Column<int>(type: "int", nullable: false),
                     PropertyID = table.Column<int>(type: "int", nullable: false),
                     UserID = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -223,6 +226,7 @@ namespace Blazor_ASPMVC.Migrations
                     ImageID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PropertyID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
