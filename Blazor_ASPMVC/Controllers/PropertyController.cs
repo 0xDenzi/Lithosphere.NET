@@ -34,12 +34,13 @@ namespace Blazor_ASPMVC.Controllers
         [Authorize]
         public async Task<IActionResult> Buy()
         {
+            var userId = _userManager.GetUserId(User); // Get the ID of the logged-in user
             var propertiesForSale = await _context.Properties
-                .Include(p => p.PropertyImages) // Include images
-                .Where(p => p.TypeofListing == TypeofListing.Sell)
+                .Include(p => p.PropertyImages)
+                .Where(p => p.TypeofListing == TypeofListing.Sell && p.UserID != userId && p.PropertyStatus == StatusofProperty.Listed) // Exclude the user's own properties
                 .ToListAsync();
 
-            return View("PropertiesList", propertiesForSale); // Use the same view for both, passing the filtered list
+            return View("PropertiesList", propertiesForSale);
         }
 
 
@@ -47,12 +48,13 @@ namespace Blazor_ASPMVC.Controllers
         [Authorize]
         public async Task<IActionResult> Rent()
         {
+            var userId = _userManager.GetUserId(User); // Get the ID of the logged-in user
             var propertiesForRent = await _context.Properties
-                .Include(p => p.PropertyImages) // Include images
-                .Where(p => p.TypeofListing == TypeofListing.Rent)
+                .Include(p => p.PropertyImages)
+                .Where(p => p.TypeofListing == TypeofListing.Rent && p.UserID != userId && p.PropertyStatus == StatusofProperty.Listed) // Exclude the user's own properties
                 .ToListAsync();
 
-            return View("PropertiesList", propertiesForRent); // Use the same view for both, passing the filtered list
+            return View("PropertiesList", propertiesForRent);
         }
 
 
@@ -158,6 +160,9 @@ namespace Blazor_ASPMVC.Controllers
                 return NotFound();
             }
 
+            var owner = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == property.UserID);
+
             var viewModel = new PropertyDetailsViewModel
             {
                 PropertyID = property.PropertyID,
@@ -171,7 +176,11 @@ namespace Blazor_ASPMVC.Controllers
                 Description = property.Description,
                 PropertyStatus = property.PropertyStatus,
                 UserID = property.UserID,
-                ImageUrls = property.PropertyImages.Select(img => "~/imgs/" + img.ImageName).ToList() // Replace with your image URL path logic
+                ImageUrls = property.PropertyImages.Select(img => "~/imgs/" + img.ImageName).ToList(), // Replace with your image URL path logic
+
+                OwnerName = owner?.Name,
+                OwnerEmail = owner?.Email,
+                OwnerMobile = owner?.Mobile
             };
 
             return View(viewModel);
@@ -181,6 +190,7 @@ namespace Blazor_ASPMVC.Controllers
         [Authorize]
         public async Task<IActionResult> Search(PropertySearchViewModel searchModel)
         {
+            var userId = _userManager.GetUserId(User);
             var query = _context.Properties
             .Include(p => p.PropertyImages) // Include images
             .AsQueryable();
@@ -202,12 +212,12 @@ namespace Blazor_ASPMVC.Controllers
 
             if (searchModel.BedsMin.HasValue)
             {
-                query = query.Where(p => p.Beds >= searchModel.BedsMin.Value);
+                query = query.Where(p => p.Beds == searchModel.BedsMin.Value);
             }
 
             if (searchModel.BathsMin.HasValue)
             {
-                query = query.Where(p => p.Baths >= searchModel.BathsMin.Value);
+                query = query.Where(p => p.Baths == searchModel.BathsMin.Value);
             }
 
             if (searchModel.PropertyType.HasValue)
@@ -215,9 +225,97 @@ namespace Blazor_ASPMVC.Controllers
                 query = query.Where(p => p.PropertyType == searchModel.PropertyType.Value);
             }
 
+            query = query.Where(p => p.UserID != userId);
+
             var properties = await query.ToListAsync();
 
             return View("PropertiesList", properties);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> EditProperty(int id)
+        {
+            var property = await _context.Properties.FindAsync(id);
+            // Ensure the property exists and belongs to the current user
+            if (property == null || property.UserID != _userManager.GetUserId(User))
+            {
+                return NotFound();
+            }
+
+            var model = new PropertyDetailsViewModel
+            {
+                
+                Price = property.Price,
+                Address = property.Address,
+                Beds = property.Beds,
+                Baths = property.Baths,
+                Area = property.Area,
+                Description = property.Description,
+                Parking = property.Parking,
+                PropertyType = property.PropertyType,
+                PropertyStatus = property.PropertyStatus
+            };
+
+            // Pass property to a view model if necessary or use directly
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProperty(int id, PropertyDetailsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var propertyToUpdate = await _context.Properties.FindAsync(id);
+            if (propertyToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            // Update properties
+            propertyToUpdate.Address = model.Address;
+            propertyToUpdate.Price = model.Price;
+            propertyToUpdate.Description = model.Description;
+            propertyToUpdate.Beds = model.Beds;
+            propertyToUpdate.Baths = model.Baths;
+            propertyToUpdate.Area = model.Area;
+            propertyToUpdate.Parking = model.Parking;
+            propertyToUpdate.PropertyType = model.PropertyType;
+            propertyToUpdate.PropertyStatus = model.PropertyStatus;
+            // Update other properties as necessary
+
+            // Handle the property images upload, if needed
+
+            _context.Update(propertyToUpdate);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManageProperties", "User");
+        }
+
+
+
+
+
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> DeleteProperty(int id)
+        {
+            var property = await _context.Properties.FindAsync(id);
+    
+            if (property == null || property.UserID != _userManager.GetUserId(User))
+            {
+                return NotFound();
+            }
+
+            _context.Properties.Remove(property);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ManageProperties", "User");
         }
 
     }

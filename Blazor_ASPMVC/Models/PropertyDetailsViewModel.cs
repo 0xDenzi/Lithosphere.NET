@@ -17,6 +17,10 @@ namespace Blazor_ASPMVC.Models
         public string UserID { get; set; }
         public List<string> ImageUrls { get; set; }
 
+        public string OwnerName { get; set; }
+        public string OwnerEmail { get; set; }
+        public string OwnerMobile { get; set; }
+
         // Added properties to handle bookmarking
         public bool IsBookmarked { get; set; }
         public string BookmarkButtonText => IsBookmarked ? "Remove Bookmark" : "Bookmark";

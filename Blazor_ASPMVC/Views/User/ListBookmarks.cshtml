@@ -46,12 +46,10 @@
                     },
                     success: function (response) {
                         if (response.success) {
-                            // Remove the property card from the list or hide the button
-                            button.closest('.property-card').remove(); // Assuming your property is within a .property-card div
+                            button.closest('.property-card').remove();
                         }
                     },
                     error: function (xhr, status, error) {
-                        // Handle errors here
                         console.error('Error removing bookmark:', status, error);
                     }
                 });

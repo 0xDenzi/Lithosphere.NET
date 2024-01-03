@@ -149,7 +149,68 @@ namespace Blazor_ASPMVC.Controllers
             return View(model);
         }
 
-        // ... (Other methods remain unchanged)
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Begin a transaction to ensure all deletions are successful
+            using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Remove user's properties
+                    var userProperties = _db.Properties.Where(p => p.UserID == user.Id);
+                    _db.Properties.RemoveRange(userProperties);
+
+                    // Remove user's bookmarks
+                    var userBookmarks = _db.Bookmarks.Where(b => b.UserID == user.Id);
+                    _db.Bookmarks.RemoveRange(userBookmarks);
+
+                    // Remove other users' bookmarks for the user's properties
+                    var propertiesIds = userProperties.Select(p => p.PropertyID).ToList();
+                    var bookmarksOfUserProperties = _db.Bookmarks.Where(b => propertiesIds.Contains(b.PropertyID));
+                    _db.Bookmarks.RemoveRange(bookmarksOfUserProperties);
+
+                    // Save changes to the database
+                    await _db.SaveChangesAsync();
+
+                    // Delete the user account
+                    var result = await _userManager.DeleteAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        // If the user could not be deleted, throw an exception to roll back the transaction
+                        throw new InvalidOperationException("Could not delete user account.");
+                    }
+
+                    // Commit the transaction
+                    await transaction.CommitAsync();
+
+                    // Sign out the user
+                    await _signInManager.SignOutAsync();
+
+                    // Redirect to the home page or a confirmation page
+                    return RedirectToAction("Index", "Home");
+                }
+                catch
+                {
+                    // If there was an error, roll back the transaction
+                    await transaction.RollbackAsync();
+                    // Log the error or display an error message to the user
+                    // ...
+                }
+            }
+
+            // If we get here, something went wrong
+            return View("Error");
+        }
+
 
         [Authorize]
         [HttpPost]
@@ -197,8 +258,15 @@ namespace Blazor_ASPMVC.Controllers
             return View("ListBookmarks", bookmarkedProperties);
         }
 
+        [Authorize]
+        public async Task<IActionResult> ManageProperties()
+        {
+            var userId = _userManager.GetUserId(User); // Make sure to inject UserManager<User> in your controller
+            var userProperties = await _db.Properties
+                                               .Where(p => p.UserID == userId)
+                                               .ToListAsync(); // Fetch properties where the current user is the owner
 
-
-
+            return View(userProperties); // Return the view with the list of properties
+        }
     }
 }

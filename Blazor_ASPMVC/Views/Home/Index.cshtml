@@ -36,6 +36,10 @@
     <div class="hero-text">
         <h1>Elevate Your Lifestyle with Lithosphere</h1>
         <p>Discover your ideal home with Lithosphere. Simple, personalized, and fulfilling, your journey to your dream home begins here, ensuring a seamless and memorable experience.</p>
-        <a href="@Url.Action("Register", "User")" class="btn btn-primary">Register</a>
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a href="@Url.Action("Register", "User")" class="btn btn-primary">Register</a>
+        }
+        
     </div>
 </div>

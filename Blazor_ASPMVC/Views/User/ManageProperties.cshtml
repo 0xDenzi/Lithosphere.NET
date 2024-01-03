@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Blazor_ASPMVC.Models.Property>
+
+@{
+    ViewData["Title"] = "Manage Properties";
+}
+
+<h2>Manage Properties</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Address</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var property in Model)
+        {
+            <tr>
+                <td>@property.Address</td>
+                <td>@property.TypeofListing.ToString()</td>
+                <td>@property.Price.ToString("C")</td>
+                <td>@property.PropertyStatus.ToString()</td>
+                <td>
+                    <a asp-controller="Property" asp-action="EditProperty" asp-route-id="@property.PropertyID" class="btn btn-primary">Edit</a>
+                    <a asp-controller="Property" asp-action="DeleteProperty" asp-route-id="@property.PropertyID" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this property?');">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

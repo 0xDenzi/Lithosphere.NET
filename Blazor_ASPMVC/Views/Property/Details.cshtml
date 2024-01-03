@@ -32,9 +32,14 @@
             <p>@Model.Description</p>
             <p>Parking: @Model.Parking.ToString()</p>
             <p>Type: @Model.PropertyType.ToString()</p>
+            <p>Property Status: @Model.PropertyStatus</p>
+            <div class="owner-details">
+                <p><strong>Owner Name:</strong> @Model.OwnerName</p>
+                <p><strong>Email:</strong> @Model.OwnerEmail</p>
+                <p><strong>Mobile:</strong> @Model.OwnerMobile</p>
+            <div/>
             <hr />
             <a href="#!" class="btn btn-primary">Request Tour</a>
-            <!-- Update the Bookmark button with an id and data attributes -->
             <button id="bookmark-btn"
                     class="btn btn-primary"
                     data-property-id="@Model.PropertyID"
@@ -46,7 +51,14 @@
 </div>
 
 <div>
-    <a asp-action="Index" class="btn btn-secondary mt-3">Back to Listings</a>
+    @if (Model.Price >= 50000)
+    {
+        <a asp-controller="Property" asp-action="Buy" class="btn btn-secondary mt-3">Back to Listings</a>
+    }
+    else
+    {
+        <a asp-controller="Property" asp-action="Rent" class="btn btn-secondary mt-3">Back to Listings</a>
+    }
 </div>
 
 @section Scripts {
@@ -77,7 +89,6 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        // Handle errors here, such as displaying a notification
                         console.error('Bookmark toggling failed:', status, error);
                     }
                 });

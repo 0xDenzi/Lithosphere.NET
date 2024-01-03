@@ -37,6 +37,9 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
+    <form asp-action="DeleteAccount" asp-controller="User" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+        <button type="submit" class="btn btn-danger">Delete Account</button>
+    </form>
 </form>
 
 <a asp-action="Index" asp-controller="Home">Back to Home</a>

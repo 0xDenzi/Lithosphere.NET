@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blazor_ASPMVC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240103063638_newMigration")]
+    [Migration("20240103090443_newMigration")]
     partial class newMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
