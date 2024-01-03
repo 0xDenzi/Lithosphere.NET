@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Blazor_ASPMVC.Models.Property>
+
+@{
+    ViewData["Title"] = "Bookmarked Properties";
+}
+
+<div class="container mt-3">
+    <div class="row">
+        @foreach (var property in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <img class="card-img-top" src="@Url.Content(property.GetFirstImageUrl())" alt="Property Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@property.Price.ToString("C")</h5>
+                        <p class="card-text">@property.Address</p>
+                        <p class="card-text">@property.Beds bds | @property.Baths ba | @property.Area sqft</p>
+                        <p class="card-text">@property.Description</p>
+                        <a href="@Url.Action("Details", "Property", new { id = property.PropertyID })" class="btn btn-primary">View Details</a>
+                        <button class="btn btn-danger remove-bookmark-btn" data-property-id="@property.PropertyID">Remove Bookmark</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+        $(document).ready(function () {
+            $('.remove-bookmark-btn').on('click', function () {
+                var button = $(this);
+                var propertyId = button.data('property-id');
+
+                $.ajax({
+                    url: '@Url.Action("ToggleBookmark", "User")',
+                    type: 'POST',
+                    data: {
+                        propertyId: propertyId,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            // Remove the property card from the list or hide the button
+                            button.closest('.property-card').remove(); // Assuming your property is within a .property-card div
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors here
+                        console.error('Error removing bookmark:', status, error);
+                    }
+                });
+            });
+        });
+    </script>
+
+}

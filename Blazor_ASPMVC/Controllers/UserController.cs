@@ -149,6 +149,55 @@ namespace Blazor_ASPMVC.Controllers
             return View(model);
         }
 
+        // ... (Other methods remain unchanged)
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ToggleBookmark(int propertyId)
+        {
+            var userId = _userManager.GetUserId(User);
+            var bookmark = await _db.Bookmarks.FirstOrDefaultAsync(
+                b => b.PropertyID == propertyId && b.UserID == userId);
+
+            bool isNowBookmarked;
+            if (bookmark == null)
+            {
+                // Bookmark doesn't exist, create it
+                var newBookmark = new Bookmark { PropertyID = propertyId, UserID = userId, BookmarkDate = DateTime.Now };
+                _db.Bookmarks.Add(newBookmark);
+                isNowBookmarked = true;
+            }
+            else
+            {
+                // Bookmark exists, remove it
+                _db.Bookmarks.Remove(bookmark);
+                isNowBookmarked = false;
+            }
+
+            await _db.SaveChangesAsync();
+
+            return Json(new { isBookmarked = isNowBookmarked });
+        }
+
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> ListBookmarks()
+        {
+            var userId = _userManager.GetUserId(User);
+            var bookmarkedProperties = await _db.Bookmarks
+                .Include(b => b.Property)  // Include the Property
+                .ThenInclude(p => p.PropertyImages)  // Then include the PropertyImages
+                .Where(b => b.UserID == userId)
+                .Select(b => b.Property)  // Now select the Property
+                .Distinct()  // If you want to avoid duplicates
+                .ToListAsync();
+
+            // Pass the bookmarked properties to the view
+            return View("ListBookmarks", bookmarkedProperties);
+        }
+
+
 
 
     }

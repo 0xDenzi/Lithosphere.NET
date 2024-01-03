@@ -248,8 +248,9 @@ namespace Blazor_ASPMVC.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookmarkDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BookmarkListingClose = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ListingID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    PropertyID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ListingID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -264,7 +265,12 @@ namespace Blazor_ASPMVC.Migrations
                         name: "FK_Bookmarks_Listings_ListingID",
                         column: x => x.ListingID,
                         principalTable: "Listings",
-                        principalColumn: "ListingID",
+                        principalColumn: "ListingID");
+                    table.ForeignKey(
+                        name: "FK_Bookmarks_Properties_PropertyID",
+                        column: x => x.PropertyID,
+                        principalTable: "Properties",
+                        principalColumn: "PropertyID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -338,6 +344,11 @@ namespace Blazor_ASPMVC.Migrations
                 name: "IX_Bookmarks_ListingID",
                 table: "Bookmarks",
                 column: "ListingID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookmarks_PropertyID",
+                table: "Bookmarks",
+                column: "PropertyID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookmarks_UserID",

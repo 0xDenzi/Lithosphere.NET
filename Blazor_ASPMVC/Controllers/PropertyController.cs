@@ -168,7 +168,7 @@ namespace Blazor_ASPMVC.Controllers
                 Area = property.Area,
                 Parking = property.Parking,
                 PropertyType = property.PropertyType,
-                Discription = property.Description,
+                Description = property.Description,
                 PropertyStatus = property.PropertyStatus,
                 UserID = property.UserID,
                 ImageUrls = property.PropertyImages.Select(img => "~/imgs/" + img.ImageName).ToList() // Replace with your image URL path logic

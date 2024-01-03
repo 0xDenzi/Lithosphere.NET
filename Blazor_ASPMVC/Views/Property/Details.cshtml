@@ -29,12 +29,18 @@
                 <span class="badge bg-info text-dark">@Model.PropertyType.ToString()</span>
             </p>
             <p>@Model.Beds beds | @Model.Baths baths | @Model.Area sqft</p>
-            <p>@Model.Discription</p>
+            <p>@Model.Description</p>
             <p>Parking: @Model.Parking.ToString()</p>
             <p>Type: @Model.PropertyType.ToString()</p>
             <hr />
             <a href="#!" class="btn btn-primary">Request Tour</a>
-            <a href="#!" class="btn btn-primary">Bookmark</a>
+            <!-- Update the Bookmark button with an id and data attributes -->
+            <button id="bookmark-btn"
+                    class="btn btn-primary"
+                    data-property-id="@Model.PropertyID"
+                    data-is-bookmarked="@Model.IsBookmarked">
+                @Model.BookmarkButtonText
+            </button>
         </div>
     </div>
 </div>
@@ -47,4 +53,35 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        $(document).ready(function () {
+            $('#bookmark-btn').click(function () {
+                var button = $(this);
+                var propertyId = button.data('property-id');
+
+                $.ajax({
+                    url: '@Url.Action("ToggleBookmark", "User")',
+                    type: 'POST',
+                    data: { propertyId: propertyId },
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {
+                        if (response.isBookmarked) {
+                            button.text('Remove Bookmark');
+                            button.data('is-bookmarked', true);
+                        } else {
+                            button.text('Bookmark');
+                            button.data('is-bookmarked', false);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors here, such as displaying a notification
+                        console.error('Bookmark toggling failed:', status, error);
+                    }
+                });
+            });
+        });
+    </script>
 }

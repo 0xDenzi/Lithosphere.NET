@@ -14,10 +14,10 @@ namespace Blazor_ASPMVC.Models
 
 
 
-        [ForeignKey("Listing")]
-        public int ListingID { get; set; }
+        [ForeignKey("Property")]
+        public int PropertyID { get; set; }
 
-        public virtual Listing Listing { get; set; }
+        public virtual Property Property { get; set; }
 
         [ForeignKey("User")]
         public string UserID { get; set; }

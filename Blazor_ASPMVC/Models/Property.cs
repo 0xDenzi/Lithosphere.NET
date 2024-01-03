@@ -83,6 +83,8 @@ namespace Blazor_ASPMVC.Models
 
         public virtual ICollection<Listing> Listings { get; set; }
 
+        public virtual ICollection<Bookmark> Bookmarks { get; set; }
+
         public Property()
         {
             PropertyStatus = StatusofProperty.Listed;
