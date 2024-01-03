@@ -29,22 +29,70 @@
                 <span class="badge bg-info text-dark">@Model.PropertyType.ToString()</span>
             </p>
             <p>@Model.Beds beds | @Model.Baths baths | @Model.Area sqft</p>
-            <p>@Model.Discription</p>
+            <p>@Model.Description</p>
             <p>Parking: @Model.Parking.ToString()</p>
             <p>Type: @Model.PropertyType.ToString()</p>
+            <p>Property Status: @Model.PropertyStatus</p>
+            <div class="owner-details">
+                <p><strong>Owner Name:</strong> @Model.OwnerName</p>
+                <p><strong>Email:</strong> @Model.OwnerEmail</p>
+                <p><strong>Mobile:</strong> @Model.OwnerMobile</p>
+            <div/>
             <hr />
             <a href="#!" class="btn btn-primary">Request Tour</a>
-            <a href="#!" class="btn btn-primary">Bookmark</a>
+            <button id="bookmark-btn"
+                    class="btn btn-primary"
+                    data-property-id="@Model.PropertyID"
+                    data-is-bookmarked="@Model.IsBookmarked">
+                @Model.BookmarkButtonText
+            </button>
         </div>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index" class="btn btn-secondary mt-3">Back to Listings</a>
+    @if (Model.Price >= 30000)
+    {
+        <a asp-controller="Property" asp-action="Buy" class="btn btn-secondary mt-3">Back to Listings</a>
+    }
+    else
+    {
+        <a asp-controller="Property" asp-action="Rent" class="btn btn-secondary mt-3">Back to Listings</a>
+    }
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        $(document).ready(function () {
+            $('#bookmark-btn').click(function () {
+                var button = $(this);
+                var propertyId = button.data('property-id');
+
+                $.ajax({
+                    url: '@Url.Action("ToggleBookmark", "User")',
+                    type: 'POST',
+                    data: { propertyId: propertyId },
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {
+                        if (response.isBookmarked) {
+                            button.text('Remove Bookmark');
+                            button.data('is-bookmarked', true);
+                        } else {
+                            button.text('Bookmark');
+                            button.data('is-bookmarked', false);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Bookmark toggling failed:', status, error);
+                    }
+                });
+            });
+        });
+    </script>
 }

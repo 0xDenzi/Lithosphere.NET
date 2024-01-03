@@ -53,10 +53,10 @@ namespace Blazor_ASPMVC.Data
 			.HasForeignKey(l => l.PropertyID)
 			.OnDelete(DeleteBehavior.Restrict);
 
-			modelBuilder.Entity<Listing>()
-			.HasMany(l => l.Bookmarks)
-			.WithOne(b => b.Listing)
-			.HasForeignKey(b => b.ListingID)
+			modelBuilder.Entity<Property>()
+			.HasMany(p => p.Bookmarks)
+			.WithOne(b => b.Property)
+			.HasForeignKey(b => b.PropertyID)
 			.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Listing>()

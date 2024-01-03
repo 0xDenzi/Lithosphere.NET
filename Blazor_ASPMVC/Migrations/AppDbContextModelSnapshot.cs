@@ -36,7 +36,10 @@ namespace Blazor_ASPMVC.Migrations
                     b.Property<DateTime?>("BookmarkListingClose")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ListingID")
+                    b.Property<int?>("ListingID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PropertyID")
                         .HasColumnType("int");
 
                     b.Property<string>("UserID")
@@ -45,6 +48,8 @@ namespace Blazor_ASPMVC.Migrations
                     b.HasKey("BookmarkID");
 
                     b.HasIndex("ListingID");
+
+                    b.HasIndex("PropertyID");
 
                     b.HasIndex("UserID");
 
@@ -413,9 +418,13 @@ namespace Blazor_ASPMVC.Migrations
 
             modelBuilder.Entity("Blazor_ASPMVC.Models.Bookmark", b =>
                 {
-                    b.HasOne("Blazor_ASPMVC.Models.Listing", "Listing")
+                    b.HasOne("Blazor_ASPMVC.Models.Listing", null)
                         .WithMany("Bookmarks")
-                        .HasForeignKey("ListingID")
+                        .HasForeignKey("ListingID");
+
+                    b.HasOne("Blazor_ASPMVC.Models.Property", "Property")
+                        .WithMany("Bookmarks")
+                        .HasForeignKey("PropertyID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -424,7 +433,7 @@ namespace Blazor_ASPMVC.Migrations
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Listing");
+                    b.Navigation("Property");
 
                     b.Navigation("User");
                 });
@@ -545,6 +554,8 @@ namespace Blazor_ASPMVC.Migrations
 
             modelBuilder.Entity("Blazor_ASPMVC.Models.Property", b =>
                 {
+                    b.Navigation("Bookmarks");
+
                     b.Navigation("Listings");
 
                     b.Navigation("PropertyImages");
