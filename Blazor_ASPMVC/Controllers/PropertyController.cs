@@ -297,26 +297,39 @@ namespace Blazor_ASPMVC.Controllers
             return RedirectToAction("ManageProperties", "User");
         }
 
-
-
-
-
-
-        [HttpPost]
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> DeleteProperty(int id)
         {
-            var property = await _context.Properties.FindAsync(id);
-    
+            var property = await _context.Properties
+                                        .Include(p => p.Listings)
+                                        .Include(p => p.Bookmarks)
+                                        .FirstOrDefaultAsync(p => p.PropertyID == id);
+
             if (property == null || property.UserID != _userManager.GetUserId(User))
             {
                 return NotFound();
             }
 
+            // Remove related listings
+            foreach (var listing in property.Listings.ToList())
+            {
+                _context.Listings.Remove(listing);
+            }
+
+            // Remove related bookmarks
+            foreach (var bookmark in property.Bookmarks.ToList())
+            {
+                _context.Bookmarks.Remove(bookmark);
+            }
+
+            // Now remove the property
             _context.Properties.Remove(property);
             await _context.SaveChangesAsync();
+
             return RedirectToAction("ManageProperties", "User");
         }
+
 
     }
 }
